@@ -2,15 +2,16 @@
 
 # by Victor Roque <victor.rooque@gmail.com> 
 
-usage() { echo "Usage: bash $0 [-d <device>] [-b <clean|installclean|continue> ] [-t] [-u] [-c]" 1>&2;
-echo "-u : Upload Log File";echo "-c : Use pre-built chromium";echo "-t : Use timestamp"; exit 1; }
+usage() { echo"";echo "Usage: bash $0 [-d <device>] [-b <clean|installclean|continue> ] [-t] [-u] [-c] [-p]" 1>&2;
+echo "";echo "-u : Upload Log File";echo "-p : Use pre-built chromium";echo "-t : Use timestamp";echo "-c : Use CCACHE"; exit 1; }
 
 pre=0
 upx=0
 contin=0
 timex=0
+ccc=0
 
-while getopts "hd:b:uct" FLAG; do
+while getopts "hd:b:uctp" FLAG; do
   case $FLAG in
     b)
     b=$OPTARG
@@ -28,8 +29,11 @@ while getopts "hd:b:uct" FLAG; do
       upx=1
       echo "Log will be uploaded."
       ;;
-    c)
+    p)
       pre=1
+      ;;
+    c)
+      ccc=1
       ;;
     h)  #show help
       usage
@@ -51,7 +55,12 @@ if [ ${pre} -eq 1 ]; then
 else
       export USE_PREBUILT_CHROMIUM=0 ;
 fi
-
+if [ ${ccc} -eq 1 ]; then
+     echo "Using CCACHE."
+     export USE_CCACHE=1 ;
+else
+     export USE_CCACHE=0 ;
+fi
 
 . build/envsetup.sh
 lunch omni_${d}-userdebug
@@ -76,7 +85,7 @@ if [ ${upx} -eq 1 ]; then
      echo "Nickname: "
      read nickk
      echo "Uploading log to Paste OMNI..."
-     echo "Link -> " | curl -d private=1 -d name=${nickk} -d title=${d}_LOG --data-urlencode text@log_$DATEX.txt http://paste.omnirom.org/api/create  ;
+     curl -d private=1 -d name=${nickk} -d title=${d}_LOG --data-urlencode text@log_$DATEX.txt http://paste.omnirom.org/api/create  ;
 else
       echo "LOG was saved to log_${TIME_NOW}.txt" ;
 fi
