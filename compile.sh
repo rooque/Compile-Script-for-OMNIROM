@@ -2,7 +2,7 @@
 
 # by Victor Roque <victor.rooque@gmail.com> 
 
-usage() { echo "Usage: $0 [-d <device>] [-b <clean|installclean|continue> ] [-t] [-u] [-c]" 1>&2;
+usage() { echo "Usage: bash $0 [-d <device>] [-b <clean|installclean|continue> ] [-t] [-u] [-c]" 1>&2;
 echo "-u : Upload Log File";echo "-c : Use pre-built chromium";echo "-t : Use timestamp"; exit 1; }
 
 pre=0
