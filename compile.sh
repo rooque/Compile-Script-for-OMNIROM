@@ -76,7 +76,7 @@ if [ ${upx} -eq 1 ]; then
      echo "Nickname: "
      read nickk
      echo "Uploading log to Paste OMNI..."
-     echo "Link -> " | curl -d private=1 -d name=${nickk} -d lang=bash -d title=${d}_LOG --data-urlencode text@log_$DATEX.txt http://paste.omnirom.org/api/create  ;
+     echo "Link -> " | curl -d private=1 -d name=${nickk} -d title=${d}_LOG --data-urlencode text@log_$DATEX.txt http://paste.omnirom.org/api/create  ;
 else
       echo "LOG was saved to log_${TIME_NOW}.txt" ;
 fi
