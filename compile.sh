@@ -62,7 +62,7 @@ fi
 
 # You need moreutils to use ts command
 # sudo apt-get intall moreutils
-DATEX=$(date +"%Y/%m/%d_%H:%M")
+DATEX=$(date +"%Y-%m-%d_%H:%M")
 
 if [ ${timex} -eq 1 ]; then
    brunch ${d} | ts "[ %T ]" | tee log_$DATEX.txt    ;
