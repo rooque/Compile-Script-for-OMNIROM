@@ -7,7 +7,7 @@ Usage:
 ======
 
 ```bash
-bash compile.sh [-d <device>] [-b <clean|installclean|continue> ] [-t] [-u] [-c]
+bash compile.sh [-d <device>] [-b <clean|installclean|continue> ] [-t] [-u] [-c] [-p]
 ```
 
 
