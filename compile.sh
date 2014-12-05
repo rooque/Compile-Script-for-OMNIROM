@@ -2,8 +2,8 @@
 
 # by Victor Roque <victor.rooque@gmail.com> 
 
-usage() { echo"";echo "Usage: bash $0 [-d <device>] [-b <clean|installclean|continue> ] [-t] [-u] [-c] [-p]" 1>&2;
-echo "";echo "-u : Upload Log File";echo "-p : Use pre-built chromium";echo "-t : Use timestamp";echo "-c : Use CCACHE"; exit 1; }
+usage() { echo"";echo "Usage: bash $0 [-d <device>] [-b <clean|installclean|continue> ] [-u] [-c] [-p]" 1>&2;
+echo "";echo "-u : Upload Log File";echo "-p : Use pre-built chromium";echo "-c : Use CCACHE"; exit 1; }
 
 function box_out() {
   local s="$*"
@@ -95,7 +95,7 @@ fi
 DATEX=$(date +"%Y-%m-%d_%H:%M")
 
 if [ ${timex} -eq 1 ]; then
-   brunch ${d} | ts "[ %T ]" | tee log_$DATEX.txt    ;
+   brunch ${d} | tee log_$DATEX.txt   ;
 else
    brunch ${d} | tee log_$DATEX.txt
 fi
@@ -103,7 +103,8 @@ fi
 
 
 if [ ${upx} -eq 1 ]; then
-     echo "Nickname: " | read nickk
+     echo "Enter Nickname: " 
+     read nickk
      box_out "Uploading log to Paste OMNI..."
      curl -d private=1 -d name=${nickk} -d title=${d}_LOG --data-urlencode text@log_$DATEX.txt http://paste.omnirom.org/api/create  ;
 else
