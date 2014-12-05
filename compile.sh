@@ -5,29 +5,50 @@
 usage() { echo"";echo "Usage: bash $0 [-d <device>] [-b <clean|installclean|continue> ] [-t] [-u] [-c] [-p]" 1>&2;
 echo "";echo "-u : Upload Log File";echo "-p : Use pre-built chromium";echo "-t : Use timestamp";echo "-c : Use CCACHE"; exit 1; }
 
+function box_out() {
+  local s="$*"
+  tput setaf 3
+  echo " -${s//?/-}-
+| ${s//?/ } |
+| $(tput setaf 4)$s$(tput setaf 3) |
+| ${s//?/ } |
+ -${s//?/-}-"
+  tput sgr 0
+}
+
+
 pre=0
 upx=0
 contin=0
 timex=0
 ccc=0
+echo "                                     ";
+echo "     ██████╗ ███╗   ███╗███╗   ██╗██╗";
+echo "    ██╔═══██╗████╗ ████║████╗  ██║██║";
+echo "    ██║   ██║██╔████╔██║██╔██╗ ██║██║";
+echo "    ██║   ██║██║╚██╔╝██║██║╚██╗██║██║";
+echo "    ╚██████╔╝██║ ╚═╝ ██║██║ ╚████║██║";
+echo "     ╚═════╝ ╚═╝     ╚═╝╚═╝  ╚═══╝╚═╝";
+echo "                                     ";
+
 
 while getopts "hd:b:uctp" FLAG; do
   case $FLAG in
     b)
     b=$OPTARG
-    echo "[           ${b}             ]"
+    box_out "Compiling = ${b} "
       ;;
     d)
     d=$OPTARG
-    echo "DEVICE =[ ${d} ]"
+    box_out "DEVICE =  ${d} "
       ;;
     t)
     timex=1
-    echo "Using timestamp."
+    box_out " Using timestamp. "
       ;;
     u)
       upx=1
-      echo "Log will be uploaded."
+    box_out "Log will be uploaded."
       ;;
     p)
       pre=1
@@ -50,13 +71,13 @@ if [ -z "${d}" ] ||  [ -z "${b}" ]; then
 fi
 
 if [ ${pre} -eq 1 ]; then
-     echo "Using pre-built chromium."
+     box_out "Using pre-built chromium."
       export USE_PREBUILT_CHROMIUM=1 ;
 else
       export USE_PREBUILT_CHROMIUM=0 ;
 fi
 if [ ${ccc} -eq 1 ]; then
-     echo "Using CCACHE."
+     box_out "Using CCACHE."
      export USE_CCACHE=1 ;
 else
      export USE_CCACHE=0 ;
@@ -82,11 +103,10 @@ fi
 
 
 if [ ${upx} -eq 1 ]; then
-     echo "Nickname: "
-     read nickk
-     echo "Uploading log to Paste OMNI..."
+     echo "Nickname: " | read nickk
+     box_out "Uploading log to Paste OMNI..."
      curl -d private=1 -d name=${nickk} -d title=${d}_LOG --data-urlencode text@log_$DATEX.txt http://paste.omnirom.org/api/create  ;
 else
-      echo "LOG was saved to log_${TIME_NOW}.txt" ;
+     box_out "LOG was saved to log_${TIME_NOW}.txt" ;
 fi
 
