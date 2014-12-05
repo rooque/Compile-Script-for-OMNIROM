@@ -22,6 +22,8 @@ upx=0
 contin=0
 timex=0
 ccc=0
+
+function logox() {
 echo "                                     ";
 echo "     ██████╗ ███╗   ███╗███╗   ██╗██╗";
 echo "    ██╔═══██╗████╗ ████║████╗  ██║██║";
@@ -30,25 +32,31 @@ echo "    ██║   ██║██║╚██╔╝██║██║╚█�
 echo "    ╚██████╔╝██║ ╚═╝ ██║██║ ╚████║██║";
 echo "     ╚═════╝ ╚═╝     ╚═╝╚═╝  ╚═══╝╚═╝";
 echo "                                     ";
+}
 
+clear
+logox
 
 while getopts "hd:b:uctp" FLAG; do
   case $FLAG in
     b)
     b=$OPTARG
-    box_out "Compiling = ${b} "
+    box_out " ${b} "
+    sleep 0.625
       ;;
     d)
     d=$OPTARG
     box_out "DEVICE =  ${d} "
+    sleep 0.625
       ;;
     t)
-    timex=1
-    box_out " Using timestamp. "
+    #timex=1
+    #box_out " Using timestamp. "
       ;;
     u)
       upx=1
     box_out "Log will be uploaded."
+    sleep 0.625 
       ;;
     p)
       pre=1
@@ -72,16 +80,23 @@ fi
 
 if [ ${pre} -eq 1 ]; then
      box_out "Using pre-built chromium."
+      sleep 0.625
       export USE_PREBUILT_CHROMIUM=1 ;
 else
       export USE_PREBUILT_CHROMIUM=0 ;
 fi
 if [ ${ccc} -eq 1 ]; then
      box_out "Using CCACHE."
+     sleep 0.625
      export USE_CCACHE=1 ;
 else
      export USE_CCACHE=0 ;
 fi
+
+clear
+logox
+box_out "Lunching..."
+sleep 0.625
 
 . build/envsetup.sh
 lunch omni_${d}-userdebug
@@ -94,16 +109,23 @@ fi
 # sudo apt-get intall moreutils
 DATEX=$(date +"%Y-%m-%d_%H:%M")
 
+clear
+logox
+box_out "Brunch..."
+sleep 0.625
+
+
 if [ ${timex} -eq 1 ]; then
    brunch ${d} | tee log_$DATEX.txt   ;
 else
-   brunch ${d} | tee log_$DATEX.txt
+   brunch ${d} | tee log_$DATEX.txt   ;
 fi
 
-
+clear
+logox
 
 if [ ${upx} -eq 1 ]; then
-     echo "Enter Nickname: " 
+     echo "Enter Nickname to the paste upload : " 
      read nickk
      box_out "Uploading log to Paste OMNI..."
      curl -d private=1 -d name=${nickk} -d title=${d}_LOG --data-urlencode text@log_$DATEX.txt http://paste.omnirom.org/api/create  ;
